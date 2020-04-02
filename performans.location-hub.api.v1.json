@@ -1,0 +1,1411 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Performans - Location Hub API",
+    "version": "1.0",
+    "description": "Performans - Location Hub herhangi bir zamanda herhangi bir cihazdan toplanan zaman damgalı ve enlem boylam bilgileri içeren coğrafi konum verilerini bulutta saklamak ve işlemek için geliştirilmiş bir servistir. Bu dokümantasyon Location Hub servisine veri göndermek için gerekli olan API kullanım bilgilerini içerir. \n\nPerformans - Location Hub API'leri REST mimarisi ile çalışmaktadır. API adreslerine talepler JSON olarak gönderilir ve JSON yanıtlar geri döner. Standart HTTP Response Code sunuçları ve API Key Authentication mekanizması kullanılmaktadır.\n\n**API adres: **\n\nhttp://location.api2.run/v1\n\n\n",
+    "contact": {
+      "url": "http://www.performans.com",
+      "email": "destek@performans.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://location.api2.run/v1"
+    }
+  ],
+  "paths": {
+    "/{bucket_name}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "bucket_name",
+          "in": "path",
+          "required": true,
+          "description": "Location Hub Proje kodu"
+        }
+      ],
+      "post": {
+        "summary": "Post Location Data",
+        "operationId": "post-bucket_name",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "route": {
+                          "type": "object",
+                          "properties": {
+                            "maxSpeed": {
+                              "type": "number",
+                              "description": "Maksimum hız m/sn"
+                            },
+                            "averageSpeed": {
+                              "type": "number",
+                              "format": "double",
+                              "description": "Ortalama hız m/sn"
+                            },
+                            "flightDistance": {
+                              "type": "number",
+                              "format": "double",
+                              "description": "Başlangıç bitiş noktaları arasındaki metre cinsinden kuş uçuşu mesafe"
+                            },
+                            "distanceTraveled": {
+                              "type": "number",
+                              "format": "double",
+                              "description": "Metre cinsinden kat edilen toplam mesafe"
+                            },
+                            "duration": {
+                              "type": "string",
+                              "description": "İlk veri gönderilmesi ile o anki sorgu arasında geçen saniye cinsinden toplam geçen süredir. "
+                            },
+                            "jobId": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "description": "İşlem durum kodunu içerir. 200 başarılı işlemi belirtir."
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "İşlem durumunun başarılı olup olmadığı belirtir. `false` olması halinde işlem başarısız demektir. "
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "İşlem sonucunda hata oluşması durumunda hata mesajı, başarılı olması halinde de gerekli olduğu hallerde başarılı işlem mesajını içerir."
+                    }
+                  }
+                },
+                "examples": {
+                  "Başarılı İşlem Sonucu": {
+                    "value": {
+                      "message": "Success",
+                      "success": true,
+                      "statusCode": 200,
+                      "data": {
+                        "route": {
+                          "id": "5e859871e111a448f411d4d4",
+                          "jobId": "d0063b36-4f1c-4d5c-942d-ead65c41ca5a",
+                          "duration": 292190000,
+                          "distanceTraveled": 8.550750142274682,
+                          "flightDistance": 6.767764643051389,
+                          "averageSpeed": 0.2926434902725857,
+                          "maxSpeed": 0.5899999737739563,
+                          "stops": [
+                            {
+                              "name": "start",
+                              "distanceTraveled": 0,
+                              "time": "2019-11-26T22:25:11.922Z",
+                              "latitude": 38.470981,
+                              "longitude": 27.1959868,
+                              "bearing": 117
+                            },
+                            {
+                              "name": "pickup",
+                              "distanceTraveled": 2.568325899620985,
+                              "time": "2019-11-26T22:25:21.592Z",
+                              "latitude": 38.470974,
+                              "longitude": 27.1960122,
+                              "bearing": 39
+                            },
+                            {
+                              "name": "destination",
+                              "distanceTraveled": 5.982424242653696,
+                              "time": "2019-11-26T22:25:41.141Z",
+                              "latitude": 38.471002,
+                              "longitude": 27.1960482,
+                              "bearing": 85
+                            }
+                          ],
+                          "regionsVisited": null
+                        },
+                        "device": {
+                          "id": "5e859871e111a448f411d4d3",
+                          "serialNumber": "716957274200b6cb"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Geçersiz cihaz kodu (Id)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ApiResult",
+                  "type": "object",
+                  "description": "Jenerik Api Sorgu cevabıdır. Her sorgu aynı tipte cevap verecektir. `data` parametresinin tipi sorguya göre değişiklik gösterir.",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "İşlem sonucunda hata oluşması durumunda hata mesajı, başarılı olması halinde de gerekli olduğu hallerde başarılı işlem mesajını içerir."
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "İşlem durumunun başarılı olup olmadığı belirtir. `false` olması halinde işlem başarısız demektir. "
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "description": "İşlem durum kodunu içerir. 200 başarılı işlemi belirtir."
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode"
+                  ]
+                },
+                "examples": {
+                  "Geçersiz Cihaz Id": {
+                    "value": {
+                      "message": "Invalid deviceId",
+                      "success": false,
+                      "statusCode": 400
+                    }
+                  },
+                  "Kaydedilmemiş Cihaz": {
+                    "value": {
+                      "message": "Device not registered. Please register this device before sending request",
+                      "success": false,
+                      "statusCode": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kayıt hatası",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ApiResult",
+                  "type": "object",
+                  "description": "Jenerik Api Sorgu cevabıdır. Her sorgu aynı tipte cevap verecektir. `data` parametresinin tipi sorguya göre değişiklik gösterir.",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "İşlem sonucunda hata oluşması durumunda hata mesajı, başarılı olması halinde de gerekli olduğu hallerde başarılı işlem mesajını içerir."
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "İşlem durumunun başarılı olup olmadığı belirtir. `false` olması halinde işlem başarısız demektir. "
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "description": "İşlem durum kodunu içerir. 200 başarılı işlemi belirtir."
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode"
+                  ]
+                },
+                "examples": {
+                  "Örnek": {
+                    "value": {
+                      "message": "Route couldn't be created",
+                      "success": false,
+                      "statusCode": 500
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Cihazda toplanan konum verilerinin Location Hub'a gönderilmesi için kullanılır. Gönderilecek konum veriler izaman göre sıralı olmalıdır. `deviceId`ve `jobId`parametreleri gönderilmelidir. Ayrıca gönderilen verilere ek bilgi de kaydedilmek isteniyor ise `Dictionary string,object` tipinde olacak şekilde `metadata` parametresi ile gönderilebilir. \n\nKonum verilerini cihazda veri tabanında biriktirip `coordinates` disisi içerisinde 100'erli ya da 500'erli paketler halinde gönderebilirsiniz. Böylelikle sorgu adedi de azalacaktır. Performans açısından bir paket içerisinde maksimum 1000 konum verisi gönderilebilecek şekilde sınırlandırma koyulmuştur.",
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "PostLocationDataRequest",
+                "type": "object",
+                "x-examples": {
+                  "Örnek 1": {
+                    "deviceId": "5de0f0d349f1d9af9831fc3e",
+                    "jobId": "d0063b36-4f1c-4d5c-942d-ead65c41ca5a",
+                    "coordinates": [
+                      {
+                        "time": "2019-11-26T22:25:11.922Z",
+                        "accuracy": 6.4730000495910645,
+                        "speed": 0.12999999523162842,
+                        "altitude": 54,
+                        "bearing": 117,
+                        "activity": 7,
+                        "activityAccuracy": 96,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709814,
+                        "longitude": 27.1959868
+                      },
+                      {
+                        "time": "2019-11-26T22:25:14.207Z",
+                        "accuracy": 6.4070000648498535,
+                        "speed": 0.3999999761581421,
+                        "altitude": 55,
+                        "bearing": 92,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709815,
+                        "longitude": 27.1959981
+                      },
+                      {
+                        "time": "2019-11-26T22:25:15.223Z",
+                        "accuracy": 6.491000175476074,
+                        "speed": 0.25,
+                        "altitude": 56,
+                        "bearing": 88,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709805,
+                        "longitude": 27.1960009
+                      },
+                      {
+                        "time": "2019-11-26T22:25:16.227Z",
+                        "accuracy": 6.182000160217285,
+                        "speed": 0.19999998807907104,
+                        "altitude": 57,
+                        "bearing": 84,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709794,
+                        "longitude": 27.1960025
+                      },
+                      {
+                        "time": "2019-11-26T22:25:18.077Z",
+                        "accuracy": 6.603000164031982,
+                        "speed": 0.5899999737739563,
+                        "altitude": 58,
+                        "bearing": 84,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709782,
+                        "longitude": 27.1960062
+                      },
+                      {
+                        "time": "2019-11-26T22:25:19.08Z",
+                        "accuracy": 6.802000045776367,
+                        "speed": 0.4099999964237213,
+                        "altitude": 58,
+                        "bearing": 81,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709755,
+                        "longitude": 27.196009
+                      },
+                      {
+                        "time": "2019-11-26T22:25:20.085Z",
+                        "accuracy": 7.079999923706055,
+                        "speed": 0.25999999046325684,
+                        "altitude": 58,
+                        "bearing": 79,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709745,
+                        "longitude": 27.1960116
+                      },
+                      {
+                        "time": "2019-11-26T22:25:21.592Z",
+                        "accuracy": 7.914000034332275,
+                        "speed": 0.3400000035762787,
+                        "altitude": 59,
+                        "bearing": 39,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709743,
+                        "longitude": 27.1960122,
+                        "metadata": {
+                          "stop": true,
+                          "stopName": "pickup"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "properties": {
+                  "deviceId": {
+                    "type": "string",
+                    "description": "Location Hub Register device metodundan alınan Cihaza ait Location Hub Cihaz Kodu (Id)."
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "description": "Konum verilerin ait olduğu görev Id'si."
+                  },
+                  "coordinates": {
+                    "description": "Zaman damgasına göre artan şekilde sıralanmış konum verileri dizisi.",
+                    "type": "array",
+                    "items": {
+                      "title": "GeoCoordinate",
+                      "type": "object",
+                      "description": "Performans Location Hub servisine gönderilecek ve cihazda toplanan coğrafi konum verisidir. Her ne kadar modelde yer alan parametrelerin tamamı zorunlu olmasa da konum verisi hata giderme algoritmalarından doğru sonuç alabilmek için her parametrenin de gönderilmesi tavsiye edilir.",
+                      "x-examples": {
+                        "Örnek 1": {
+                          "time": "2019-11-26T22:25:11.922Z",
+                          "accuracy": 6.4730000495910645,
+                          "speed": 0.12999999523162842,
+                          "altitude": 54,
+                          "bearing": 117,
+                          "activity": 7,
+                          "activityAccuracy": 96,
+                          "batteryLevel": 0.9399999976158142,
+                          "batteryStatus": 3,
+                          "latitude": 38.4709814,
+                          "longitude": 27.1959868
+                        }
+                      },
+                      "properties": {
+                        "time": {
+                          "type": "string",
+                          "description": "Konum verisinin alındığı zaman damgası. Cihazdan alınmalıdır. ISO 8601 formatında  2020-04-02T13:26:11.922Z gibi milisaniyeyi de içerecek şekilde olmalıdır.",
+                          "format": "date-time",
+                          "example": "2020-04-02T13:26:11.922Z"
+                        },
+                        "accuracy": {
+                          "type": "number",
+                          "default": 0,
+                          "description": "Konum verisinin ne kadar hassas olarak alındığını belirten hassasiyet bilgisidir. ",
+                          "format": "double",
+                          "example": "6.473",
+                          "minimum": 0
+                        },
+                        "speed": {
+                          "type": "number",
+                          "default": 0,
+                          "description": "Konum verisi alındığı andaki hız (m/sn cinsinden) Konum verisi hata giderme algoritmalarında kullanıldığı için gönderilmesi tavsiye edilir.",
+                          "format": "double",
+                          "example": "0.12993",
+                          "minimum": 0
+                        },
+                        "altitude": {
+                          "type": "number",
+                          "description": "Konum veris alındığı andaki cihazdan alınan metre cinsinden rakım (altitude) bilgisidir. ",
+                          "format": "double",
+                          "example": "54",
+                          "minimum": 0
+                        },
+                        "bearing": {
+                          "type": "number",
+                          "default": 0,
+                          "description": "Chazın kuzey kutbu 0 derece olacak şekilde hesaplanan yön bilgisidir. ",
+                          "format": "double",
+                          "example": "117",
+                          "minimum": 0,
+                          "maximum": 359
+                        },
+                        "activity": {
+                          "type": "integer",
+                          "description": "Cihazdan alınan aktivite değeridir. int olmadırı.",
+                          "format": "int32",
+                          "example": "7"
+                        },
+                        "activityAccuracy": {
+                          "type": "number",
+                          "description": "Yüzde cinsinden activity değerinin ölçüm hassasiyeti",
+                          "format": "double",
+                          "example": "96",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "batteryLevel": {
+                          "type": "number",
+                          "description": "Konum verisi alma anındaki yüzde cinsinden cihazın pil seviyesini belirtir. 25, 99 gibi",
+                          "format": "double",
+                          "example": "59",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "batteryStatus": {
+                          "type": "integer",
+                          "description": "Pil durumu. Şarr oluyor vb. durumlarıbelirtir.",
+                          "format": "int32",
+                          "example": "80"
+                        },
+                        "latitude": {
+                          "type": "number",
+                          "format": "double",
+                          "example": "38.4709814",
+                          "minimum": -90,
+                          "maximum": 90,
+                          "description": "Konum verisi enlem değeri."
+                        },
+                        "longitude": {
+                          "type": "number",
+                          "default": 0,
+                          "format": "double",
+                          "example": "27.1959868",
+                          "minimum": -180,
+                          "maximum": 180,
+                          "description": "Konum verisi boylam değeri"
+                        }
+                      },
+                      "required": [
+                        "time",
+                        "latitude",
+                        "longitude"
+                      ]
+                    }
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Dictionary<string, object> türünden veri içerebilir."
+                  }
+                },
+                "required": [
+                  "deviceId",
+                  "jobId",
+                  "coordinates"
+                ]
+              },
+              "examples": {
+                "Örnek 1": {
+                  "value": {
+                    "deviceId": "5de0f0d349f1d9af9831fc3e",
+                    "jobId": "d0063b36-4f1c-4d5c-942d-ead65c41ca5a",
+                    "coordinates": [
+                      {
+                        "time": "2019-11-26T22:25:11.922Z",
+                        "accuracy": 6.4730000495910645,
+                        "speed": 0.12999999523162842,
+                        "altitude": 54,
+                        "bearing": 117,
+                        "activity": 7,
+                        "activityAccuracy": 96,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709814,
+                        "longitude": 27.1959868
+                      },
+                      {
+                        "time": "2019-11-26T22:25:14.207Z",
+                        "accuracy": 6.4070000648498535,
+                        "speed": 0.3999999761581421,
+                        "altitude": 55,
+                        "bearing": 92,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709815,
+                        "longitude": 27.1959981
+                      },
+                      {
+                        "time": "2019-11-26T22:25:15.223Z",
+                        "accuracy": 6.491000175476074,
+                        "speed": 0.25,
+                        "altitude": 56,
+                        "bearing": 88,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709805,
+                        "longitude": 27.1960009
+                      },
+                      {
+                        "time": "2019-11-26T22:25:16.227Z",
+                        "accuracy": 6.182000160217285,
+                        "speed": 0.19999998807907104,
+                        "altitude": 57,
+                        "bearing": 84,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709794,
+                        "longitude": 27.1960025
+                      },
+                      {
+                        "time": "2019-11-26T22:25:18.077Z",
+                        "accuracy": 6.603000164031982,
+                        "speed": 0.5899999737739563,
+                        "altitude": 58,
+                        "bearing": 84,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709782,
+                        "longitude": 27.1960062
+                      },
+                      {
+                        "time": "2019-11-26T22:25:19.08Z",
+                        "accuracy": 6.802000045776367,
+                        "speed": 0.4099999964237213,
+                        "altitude": 58,
+                        "bearing": 81,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709755,
+                        "longitude": 27.196009
+                      },
+                      {
+                        "time": "2019-11-26T22:25:20.085Z",
+                        "accuracy": 7.079999923706055,
+                        "speed": 0.25999999046325684,
+                        "altitude": 58,
+                        "bearing": 79,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709745,
+                        "longitude": 27.1960116
+                      },
+                      {
+                        "time": "2019-11-26T22:25:21.592Z",
+                        "accuracy": 7.914000034332275,
+                        "speed": 0.3400000035762787,
+                        "altitude": 59,
+                        "bearing": 39,
+                        "activity": 7,
+                        "activityAccuracy": 94,
+                        "batteryLevel": 0.9399999976158142,
+                        "batteryStatus": 3,
+                        "latitude": 38.4709743,
+                        "longitude": 27.1960122,
+                        "metadata": {
+                          "stop": true,
+                          "stopName": "pickup"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "description": "Performans Location Hub servisine gönderilecek ve cihazda toplanan coğrafi konum verisidir. Her ne kadar modelde yer alan parametrelerin tamamı zorunlu olmasa da konum verisi hata giderme algoritmalarından doğru sonuç alabilmek için her parametrenin de gönderilmesi tavsiye edilir."
+        }
+      }
+    },
+    "/{bucket_name}/registerdevice": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "bucket_name",
+          "in": "path",
+          "required": true,
+          "description": "Location Hub Proje kodu"
+        }
+      ],
+      "post": {
+        "summary": "Konum Verisi Kaydetme",
+        "operationId": "post-bucket_name-registerdevice",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "description": "İşlem durum kodunu içerir. 200 başarılı işlemi belirtir."
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "İşlem durumunun başarılı olup olmadığı belirtir. `false` olması halinde işlem başarısız demektir. "
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "İşlem sonucunda hata oluşması durumunda hata mesajı, başarılı olması halinde de gerekli olduğu hallerde başarılı işlem mesajını içerir."
+                    },
+                    "data": {
+                      "title": "Device",
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Cihaza ait Location Hub kayıt kodu (Id). Konum verileri gönderilirken `deviceId` parametresinde bu değer kullanılmalıdırç"
+                        },
+                        "serialNumber": {
+                          "type": "string",
+                          "description": "Cihaza ait seri numarasıdır."
+                        },
+                        "manufacturer": {
+                          "type": "string",
+                          "description": "Üretici"
+                        },
+                        "modelNumber": {
+                          "type": "string",
+                          "description": "Cihaz model numarası"
+                        },
+                        "modelName": {
+                          "type": "string",
+                          "description": "Model Adı"
+                        },
+                        "os": {
+                          "type": "string",
+                          "description": "İşletim sistemi"
+                        },
+                        "osVersion": {
+                          "type": "string",
+                          "description": "İşletim sistemi versiyonu"
+                        },
+                        "appName": {
+                          "type": "string",
+                          "description": "Uygulama adı"
+                        },
+                        "appVersion": {
+                          "type": "string",
+                          "description": "Uygulama versiyonu"
+                        },
+                        "createdOn": {
+                          "type": "string",
+                          "description": "İlk oluşturulma/kayıt tarihi ISO UTC Date",
+                          "format": "date-time",
+                          "example": "2020-04-02T14:11:26.4047786+03:00"
+                        },
+                        "isCreated": {
+                          "type": "string",
+                          "description": "Oluşturulma mı güncelleme mi yapıldığı bilgisi"
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "Device Registered": {
+                    "value": {
+                      "message": "Device registered",
+                      "success": true,
+                      "statusCode": 200,
+                      "data": {
+                        "id": "5e85d8800b1daf22608d8c8c",
+                        "serialNumber": "D23N7o7dfK5vXvIKGkOjGnWZhHQxNj22",
+                        "manufacturer": "apple",
+                        "modelNumber": "iPhone5,2",
+                        "modelName": null,
+                        "os": "iphone",
+                        "osVersion": "10.3.4",
+                        "appName": "com.allianz-assistance.digitalrsadriver",
+                        "appVersion": "1.6.23",
+                        "lastKnownPosition": null,
+                        "lastHeartbeatReceivedOn": null,
+                        "createdOn": "2020-04-02T15:20:16.9455211+03:00",
+                        "isCreated": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ApiResult",
+                  "type": "object",
+                  "description": "Jenerik Api Sorgu cevabıdır. Her sorgu aynı tipte cevap verecektir. `data` parametresinin tipi sorguya göre değişiklik gösterir.",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "İşlem sonucunda hata oluşması durumunda hata mesajı, başarılı olması halinde de gerekli olduğu hallerde başarılı işlem mesajını içerir."
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "İşlem durumunun başarılı olup olmadığı belirtir. `false` olması halinde işlem başarısız demektir. "
+                    },
+                    "statusCode": {
+                      "type": "integer",
+                      "description": "İşlem durum kodunu içerir. 200 başarılı işlemi belirtir."
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "statusCode"
+                  ]
+                },
+                "examples": {
+                  "Örnek": {
+                    "value": {
+                      "message": "Invalid device definition",
+                      "success": false,
+                      "statusCode": 400,
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Herhangi bir cihazda toplanan konum verilerini Locatin Hub servisine gönderebilmek için öncelikle veriyi gönderecek olan cvihazın kendisini Locatin Hub servisine kayıt etmesi gerekir. Bu API metodu cihazı Location Hub servisine kaydetmek için kullanılır. Aynı zamanda cihaz ile iligli bilgiler de istatistiki ve hata giderme süreçlerinde kullanılmak üzere kaydedilmelidir. \n\n**Bu metodu aynı cihaz için birden fazla çalıştırabilir miyim?**\n\nEvet bu metod aynı cihaz için birden fazla çağırılabilir. Aten istenilen de aslında budur. Bir cihaz bu metodu ilk defa çağırdığında servis tarafından gönderilen cihaz bilgileri kaydedilerek o cihaza ait bir Id (Cihaz Kodu) üretilir. Bu Id konum verileri gönderilirken kullanılır. Aynı cihaz tekrar bu metodu çağırdığında cihaz seri numarası değişmediği sürece servis tarafından sadece cihaza ait değişen bilgiler var ise güncellenerek (Ör: İşletim sistemi versiyonu, uygulama versiyonu gibi.) aynı cihaz kodu (Id) geri dönecektir. \n\n ",
+        "security": [
+          {
+            "X-Api-Key": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "RegisterDeviceRequest",
+                "type": "object",
+                "description": "Performans - Location Hub servisine cihaz kaydetmek/güncelleme metodu çağırılırken gönderilen veri modeli.",
+                "properties": {
+                  "serialNumber": {
+                    "type": "string",
+                    "description": "Cihaza ait seri numarasıdır. Her cihaz/mobil uygulama  için tekil bir numara olmalıdır. Aksi taktirde farklı cihazlardan gelen konum verileri tek bir cihazdan gelmiş gibi görünecektir. Android işletim sistemi olan cihazlarda Seri Numarası ya da UUID kullanılabilir. iOS cihazlarda ise uygulama tarafından uygulama yeniden yüklenene ya da güncellenene kadar geçerli olacak bir seri numarasını kendiniz üreterek her talepte aynı seri numarasını gönderebilirsiniz."
+                  },
+                  "manufacturer": {
+                    "type": "string",
+                    "description": "Cihazın ütericisi. Apple, Samsung, Xaiomi gibi. "
+                  },
+                  "modelNumber": {
+                    "type": "string",
+                    "description": "Chaz model numarası. iPhone5,2 yada SM-J727T1 gibi cihazdan alınacak olan bilgidir"
+                  },
+                  "os": {
+                    "type": "string",
+                    "description": "Cihaz işletim sistemi. Android, iOs gibi."
+                  },
+                  "osVersion": {
+                    "type": "string",
+                    "description": "Cihaz işletim sistemi versionu. 10.3.4 gibi."
+                  },
+                  "appName": {
+                    "type": "string",
+                    "description": "Uygulama bundle adı. com.performans.locationhubclient gibi cihazı kaydeden uygulamanın Google Play store ya da Apple Store da yayınlanan uygulamaya ait tekil uygulama bundle kodu olmadılır. "
+                  },
+                  "appVersion": {
+                    "type": "string",
+                    "description": "Cihaz kaytı talebini gönderen uygulamanın versiyonu. 2.0.16 gibi semantik versiyon olmalıdır."
+                  }
+                },
+                "required": [
+                  "serialNumber"
+                ],
+                "x-examples": {
+                  "Örnek 1": {
+                    "serialNumber": "D23N7o7dfK5vXvIKGkOjGnWZhHQxNj",
+                    "manufacturer": "apple",
+                    "modelNumber": "iPhone5,2",
+                    "os": "iOs",
+                    "osVersion": "10.3.4",
+                    "appName": "com.allianz-assistance.digitalracdriver",
+                    "appVersion": "1.6.23"
+                  }
+                }
+              },
+              "examples": {
+                "Örnek 1": {
+                  "value": {
+                    "serialNumber": "D23N7o7dfK5vXvIKGkOjGnWZhHQxNj",
+                    "manufacturer": "apple",
+                    "modelNumber": "iPhone5,2",
+                    "os": "iOs",
+                    "osVersion": "10.3.4",
+                    "appName": "com.allianz-assistance.digitalracdriver",
+                    "appVersion": "1.6.23"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Performans - Location Hub servisine cihaz kaydetmek/güncelleme metodu çağırılırken gönderilen veri kullanılmalıdır. "
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "X-Api-Key": {
+        "name": "X-Api-Key",
+        "type": "apiKey",
+        "in": "header",
+        "description": "API talepleri Header'a eklenecek X-Api-Key API anahtarı ile gönderilmelir"
+      }
+    },
+    "schemas": {
+      "RegisterDeviceRequest": {
+        "title": "RegisterDeviceRequest",
+        "type": "object",
+        "description": "Performans - Location Hub servisine cihaz kaydetmek/güncelleme metodu çağırılırken gönderilen veri modeli.",
+        "properties": {
+          "serialNumber": {
+            "type": "string",
+            "description": "Cihaza ait seri numarasıdır. Her cihaz/mobil uygulama  için tekil bir numara olmalıdır. Aksi taktirde farklı cihazlardan gelen konum verileri tek bir cihazdan gelmiş gibi görünecektir. Android işletim sistemi olan cihazlarda Seri Numarası ya da UUID kullanılabilir. iOS cihazlarda ise uygulama tarafından uygulama yeniden yüklenene ya da güncellenene kadar geçerli olacak bir seri numarasını kendiniz üreterek her talepte aynı seri numarasını gönderebilirsiniz."
+          },
+          "manufacturer": {
+            "type": "string",
+            "description": "Cihazın ütericisi. Apple, Samsung, Xaiomi gibi. "
+          },
+          "modelNumber": {
+            "type": "string",
+            "description": "Chaz model numarası. iPhone5,2 yada SM-J727T1 gibi cihazdan alınacak olan bilgidir"
+          },
+          "os": {
+            "type": "string",
+            "description": "Cihaz işletim sistemi. Android, iOs gibi."
+          },
+          "osVersion": {
+            "type": "string",
+            "description": "Cihaz işletim sistemi versionu. 10.3.4 gibi."
+          },
+          "appName": {
+            "type": "string",
+            "description": "Uygulama bundle adı. com.performans.locationhubclient gibi cihazı kaydeden uygulamanın Google Play store ya da Apple Store da yayınlanan uygulamaya ait tekil uygulama bundle kodu olmadılır. "
+          },
+          "appVersion": {
+            "type": "string",
+            "description": "Cihaz kaytı talebini gönderen uygulamanın versiyonu. 2.0.16 gibi semantik versiyon olmalıdır."
+          }
+        },
+        "required": [
+          "serialNumber"
+        ],
+        "x-examples": {
+          "Örnek 1": {
+            "serialNumber": "D23N7o7dfK5vXvIKGkOjGnWZhHQxNj",
+            "manufacturer": "apple",
+            "modelNumber": "iPhone5,2",
+            "os": "iOs",
+            "osVersion": "10.3.4",
+            "appName": "com.allianz-assistance.digitalracdriver",
+            "appVersion": "1.6.23"
+          }
+        }
+      },
+      "GeoCoordinate": {
+        "title": "GeoCoordinate",
+        "type": "object",
+        "description": "Performans Location Hub servisine gönderilecek ve cihazda toplanan coğrafi konum verisidir. Her ne kadar modelde yer alan parametrelerin tamamı zorunlu olmasa da konum verisi hata giderme algoritmalarından doğru sonuç alabilmek için her parametrenin de gönderilmesi tavsiye edilir.",
+        "x-examples": {
+          "Örnek 1": {
+            "time": "2019-11-26T22:25:11.922Z",
+            "accuracy": 6.4730000495910645,
+            "speed": 0.12999999523162842,
+            "altitude": 54,
+            "bearing": 117,
+            "activity": 7,
+            "activityAccuracy": 96,
+            "batteryLevel": 0.9399999976158142,
+            "batteryStatus": 3,
+            "latitude": 38.4709814,
+            "longitude": 27.1959868
+          }
+        },
+        "properties": {
+          "time": {
+            "type": "string",
+            "description": "Konum verisinin alındığı zaman damgası. Cihazdan alınmalıdır. ISO 8601 formatında  2020-04-02T13:26:11.922Z gibi milisaniyeyi de içerecek şekilde olmalıdır.",
+            "format": "date-time",
+            "example": "2020-04-02T13:26:11.922Z"
+          },
+          "accuracy": {
+            "type": "number",
+            "default": 0,
+            "description": "Konum verisinin ne kadar hassas olarak alındığını belirten hassasiyet bilgisidir. ",
+            "format": "double",
+            "example": "6.473",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "default": 0,
+            "description": "Konum verisi alındığı andaki hız (m/sn cinsinden) Konum verisi hata giderme algoritmalarında kullanıldığı için gönderilmesi tavsiye edilir.",
+            "format": "double",
+            "example": "0.12993",
+            "minimum": 0
+          },
+          "altitude": {
+            "type": "number",
+            "description": "Konum veris alındığı andaki cihazdan alınan metre cinsinden rakım (altitude) bilgisidir. ",
+            "format": "double",
+            "example": "54",
+            "minimum": 0
+          },
+          "bearing": {
+            "type": "number",
+            "default": 0,
+            "description": "Chazın kuzey kutbu 0 derece olacak şekilde hesaplanan yön bilgisidir. ",
+            "format": "double",
+            "example": "117",
+            "minimum": 0,
+            "maximum": 359
+          },
+          "activity": {
+            "type": "integer",
+            "description": "Cihazdan alınan aktivite değeridir. int olmadırı.",
+            "format": "int32",
+            "example": "7"
+          },
+          "activityAccuracy": {
+            "type": "number",
+            "description": "Yüzde cinsinden activity değerinin ölçüm hassasiyeti",
+            "format": "double",
+            "example": "96",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "batteryLevel": {
+            "type": "number",
+            "description": "Konum verisi alma anındaki yüzde cinsinden cihazın pil seviyesini belirtir. 25, 99 gibi",
+            "format": "double",
+            "example": "59",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "batteryStatus": {
+            "type": "integer",
+            "description": "Pil durumu. Şarr oluyor vb. durumlarıbelirtir.",
+            "format": "int32",
+            "example": "80"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double",
+            "example": "38.4709814",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Konum verisi enlem değeri."
+          },
+          "longitude": {
+            "type": "number",
+            "default": 0,
+            "format": "double",
+            "example": "27.1959868",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Konum verisi boylam değeri"
+          }
+        },
+        "required": [
+          "time",
+          "latitude",
+          "longitude"
+        ]
+      },
+      "PostLocationDataRequest": {
+        "title": "PostLocationDataRequest",
+        "type": "object",
+        "x-examples": {
+          "Örnek 1": {
+            "deviceId": "5de0f0d349f1d9af9831fc3e",
+            "jobId": "d0063b36-4f1c-4d5c-942d-ead65c41ca5a",
+            "coordinates": [
+              {
+                "time": "2019-11-26T22:25:11.922Z",
+                "accuracy": 6.4730000495910645,
+                "speed": 0.12999999523162842,
+                "altitude": 54,
+                "bearing": 117,
+                "activity": 7,
+                "activityAccuracy": 96,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709814,
+                "longitude": 27.1959868
+              },
+              {
+                "time": "2019-11-26T22:25:14.207Z",
+                "accuracy": 6.4070000648498535,
+                "speed": 0.3999999761581421,
+                "altitude": 55,
+                "bearing": 92,
+                "activity": 7,
+                "activityAccuracy": 94,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709815,
+                "longitude": 27.1959981
+              },
+              {
+                "time": "2019-11-26T22:25:15.223Z",
+                "accuracy": 6.491000175476074,
+                "speed": 0.25,
+                "altitude": 56,
+                "bearing": 88,
+                "activity": 7,
+                "activityAccuracy": 94,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709805,
+                "longitude": 27.1960009
+              },
+              {
+                "time": "2019-11-26T22:25:16.227Z",
+                "accuracy": 6.182000160217285,
+                "speed": 0.19999998807907104,
+                "altitude": 57,
+                "bearing": 84,
+                "activity": 7,
+                "activityAccuracy": 94,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709794,
+                "longitude": 27.1960025
+              },
+              {
+                "time": "2019-11-26T22:25:18.077Z",
+                "accuracy": 6.603000164031982,
+                "speed": 0.5899999737739563,
+                "altitude": 58,
+                "bearing": 84,
+                "activity": 7,
+                "activityAccuracy": 94,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709782,
+                "longitude": 27.1960062
+              },
+              {
+                "time": "2019-11-26T22:25:19.08Z",
+                "accuracy": 6.802000045776367,
+                "speed": 0.4099999964237213,
+                "altitude": 58,
+                "bearing": 81,
+                "activity": 7,
+                "activityAccuracy": 94,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709755,
+                "longitude": 27.196009
+              },
+              {
+                "time": "2019-11-26T22:25:20.085Z",
+                "accuracy": 7.079999923706055,
+                "speed": 0.25999999046325684,
+                "altitude": 58,
+                "bearing": 79,
+                "activity": 7,
+                "activityAccuracy": 94,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709745,
+                "longitude": 27.1960116
+              },
+              {
+                "time": "2019-11-26T22:25:21.592Z",
+                "accuracy": 7.914000034332275,
+                "speed": 0.3400000035762787,
+                "altitude": 59,
+                "bearing": 39,
+                "activity": 7,
+                "activityAccuracy": 94,
+                "batteryLevel": 0.9399999976158142,
+                "batteryStatus": 3,
+                "latitude": 38.4709743,
+                "longitude": 27.1960122,
+                "metadata": {
+                  "stop": true,
+                  "stopName": "pickup"
+                }
+              }
+            ]
+          }
+        },
+        "properties": {
+          "deviceId": {
+            "type": "string",
+            "description": "Location Hub Register device metodundan alınan Cihaza ait Location Hub Cihaz Kodu (Id)."
+          },
+          "jobId": {
+            "type": "string",
+            "description": "Konum verilerin ait olduğu görev Id'si."
+          },
+          "coordinates": {
+            "description": "Zaman damgasına göre artan şekilde sıralanmış konum verileri dizisi.",
+            "type": "array",
+            "items": {
+              "title": "GeoCoordinate",
+              "type": "object",
+              "description": "Performans Location Hub servisine gönderilecek ve cihazda toplanan coğrafi konum verisidir. Her ne kadar modelde yer alan parametrelerin tamamı zorunlu olmasa da konum verisi hata giderme algoritmalarından doğru sonuç alabilmek için her parametrenin de gönderilmesi tavsiye edilir.",
+              "x-examples": {
+                "Örnek 1": {
+                  "time": "2019-11-26T22:25:11.922Z",
+                  "accuracy": 6.4730000495910645,
+                  "speed": 0.12999999523162842,
+                  "altitude": 54,
+                  "bearing": 117,
+                  "activity": 7,
+                  "activityAccuracy": 96,
+                  "batteryLevel": 0.9399999976158142,
+                  "batteryStatus": 3,
+                  "latitude": 38.4709814,
+                  "longitude": 27.1959868
+                }
+              },
+              "properties": {
+                "time": {
+                  "type": "string",
+                  "description": "Konum verisinin alındığı zaman damgası. Cihazdan alınmalıdır. ISO 8601 formatında  2020-04-02T13:26:11.922Z gibi milisaniyeyi de içerecek şekilde olmalıdır.",
+                  "format": "date-time",
+                  "example": "2020-04-02T13:26:11.922Z"
+                },
+                "accuracy": {
+                  "type": "number",
+                  "default": 0,
+                  "description": "Konum verisinin ne kadar hassas olarak alındığını belirten hassasiyet bilgisidir. ",
+                  "format": "double",
+                  "example": "6.473",
+                  "minimum": 0
+                },
+                "speed": {
+                  "type": "number",
+                  "default": 0,
+                  "description": "Konum verisi alındığı andaki hız (m/sn cinsinden) Konum verisi hata giderme algoritmalarında kullanıldığı için gönderilmesi tavsiye edilir.",
+                  "format": "double",
+                  "example": "0.12993",
+                  "minimum": 0
+                },
+                "altitude": {
+                  "type": "number",
+                  "description": "Konum veris alındığı andaki cihazdan alınan metre cinsinden rakım (altitude) bilgisidir. ",
+                  "format": "double",
+                  "example": "54",
+                  "minimum": 0
+                },
+                "bearing": {
+                  "type": "number",
+                  "default": 0,
+                  "description": "Chazın kuzey kutbu 0 derece olacak şekilde hesaplanan yön bilgisidir. ",
+                  "format": "double",
+                  "example": "117",
+                  "minimum": 0,
+                  "maximum": 359
+                },
+                "activity": {
+                  "type": "integer",
+                  "description": "Cihazdan alınan aktivite değeridir. int olmadırı.",
+                  "format": "int32",
+                  "example": "7"
+                },
+                "activityAccuracy": {
+                  "type": "number",
+                  "description": "Yüzde cinsinden activity değerinin ölçüm hassasiyeti",
+                  "format": "double",
+                  "example": "96",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "batteryLevel": {
+                  "type": "number",
+                  "description": "Konum verisi alma anındaki yüzde cinsinden cihazın pil seviyesini belirtir. 25, 99 gibi",
+                  "format": "double",
+                  "example": "59",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "batteryStatus": {
+                  "type": "integer",
+                  "description": "Pil durumu. Şarr oluyor vb. durumlarıbelirtir.",
+                  "format": "int32",
+                  "example": "80"
+                },
+                "latitude": {
+                  "type": "number",
+                  "format": "double",
+                  "example": "38.4709814",
+                  "minimum": -90,
+                  "maximum": 90,
+                  "description": "Konum verisi enlem değeri."
+                },
+                "longitude": {
+                  "type": "number",
+                  "default": 0,
+                  "format": "double",
+                  "example": "27.1959868",
+                  "minimum": -180,
+                  "maximum": 180,
+                  "description": "Konum verisi boylam değeri"
+                }
+              },
+              "required": [
+                "time",
+                "latitude",
+                "longitude"
+              ]
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Dictionary<string, object> türünden veri içerebilir."
+          }
+        },
+        "required": [
+          "deviceId",
+          "jobId",
+          "coordinates"
+        ]
+      },
+      "ApiResult": {
+        "title": "ApiResult",
+        "type": "object",
+        "description": "Jenerik Api Sorgu cevabıdır. Her sorgu aynı tipte cevap verecektir. `data` parametresinin tipi sorguya göre değişiklik gösterir.",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "İşlem sonucunda hata oluşması durumunda hata mesajı, başarılı olması halinde de gerekli olduğu hallerde başarılı işlem mesajını içerir."
+          },
+          "success": {
+            "type": "boolean",
+            "description": "İşlem durumunun başarılı olup olmadığı belirtir. `false` olması halinde işlem başarısız demektir. "
+          },
+          "statusCode": {
+            "type": "integer",
+            "description": "İşlem durum kodunu içerir. 200 başarılı işlemi belirtir."
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "success",
+          "statusCode"
+        ]
+      },
+      "Route": {
+        "title": "Route",
+        "type": "object",
+        "description": "Location Hub servisine Post GeoCoordinates metodu ile gönderilen veriler ilk defa gönderildiğinde bir rota kaydı oluşturulur. Daha sonraki aynı `deviceId` ve `jobId` parametreleri ile gönderilen konum verileri bu rotaya eklenir.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "jobId": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string",
+            "description": "İlk veri gönderilmesi ile o anki sorgu arasında geçen saniye cinsinden toplam geçen süredir. "
+          },
+          "distanceTraveled": {
+            "type": "number",
+            "format": "double",
+            "description": "Metre cinsinden kat edilen toplam mesafe"
+          },
+          "flightDistance": {
+            "type": "number",
+            "format": "double",
+            "description": "Başlangıç bitiş noktaları arasındaki metre cinsinden kuş uçuşu mesafe"
+          },
+          "averageSpeed": {
+            "type": "number",
+            "format": "double",
+            "description": "Ortalama hız m/sn"
+          },
+          "maxSpeed": {
+            "type": "number",
+            "description": "Maksimum hız m/sn"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "Device": {
+        "title": "Device",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Cihaza ait Location Hub kayıt kodu (Id). Konum verileri gönderilirken `deviceId` parametresinde bu değer kullanılmalıdırç"
+          },
+          "serialNumber": {
+            "type": "string",
+            "description": "Cihaza ait seri numarasıdır."
+          },
+          "manufacturer": {
+            "type": "string",
+            "description": "Üretici"
+          },
+          "modelNumber": {
+            "type": "string",
+            "description": "Cihaz model numarası"
+          },
+          "modelName": {
+            "type": "string",
+            "description": "Model Adı"
+          },
+          "os": {
+            "type": "string",
+            "description": "İşletim sistemi"
+          },
+          "osVersion": {
+            "type": "string",
+            "description": "İşletim sistemi versiyonu"
+          },
+          "appName": {
+            "type": "string",
+            "description": "Uygulama adı"
+          },
+          "appVersion": {
+            "type": "string",
+            "description": "Uygulama versiyonu"
+          },
+          "createdOn": {
+            "type": "string",
+            "description": "İlk oluşturulma/kayıt tarihi ISO UTC Date",
+            "format": "date-time",
+            "example": "2020-04-02T14:11:26.4047786+03:00"
+          },
+          "isCreated": {
+            "type": "string",
+            "description": "Oluşturulma mı güncelleme mi yapıldığı bilgisi"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    }
+  }
+}
